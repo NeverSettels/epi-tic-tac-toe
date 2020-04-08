@@ -4,6 +4,7 @@ body{
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 #board-container{
   display: flex;
@@ -13,11 +14,22 @@ body{
 }
 
 #board-container div{
-  border: 1px black solid;
+
   width: 100px;
   height: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 5rem;
+}
+#tl,#tm,#ml,#mm{
+  border-bottom: 1px black solid;
+  border-right: 1px black solid;
+}
+#tr,#mr{
+  border-bottom: 1px black solid;
+}
+#bm{
+  border-left:  1px black solid;
+  border-right: 1px black solid;
 }

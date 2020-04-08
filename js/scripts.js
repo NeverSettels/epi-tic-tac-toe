@@ -45,16 +45,18 @@ Board.prototype.checkWinner = function () {
 $(document).ready(() => {
   let game = new Board()
   let turn = 1;
+  const plop = new Audio('https://freesound.org/data/previews/19/19987_37876-lq.mp3')
   console.log(null == null)
   $('#board-container').on('click', 'div', event => {
     let key = event.target.id
     if (!game[key]) {
+      plop.play()
       if (turn % 2 === 0) {
         game[key] = 'O'
-        $(`#${key}`).text('O')
+        $(`#${key}`).html(`<span class="animated rubberBand">O</span>`)
       } else {
         game[key] = 'X'
-        $(`#${key}`).text('X')
+        $(`#${key}`).html(`<span class="animated rubberBand">X</span>`)
       }
       game.checkWinner();
       if (game.over || turn >= 9) {
@@ -70,3 +72,5 @@ $(document).ready(() => {
     console.log(game)
   })
 })
+
+
