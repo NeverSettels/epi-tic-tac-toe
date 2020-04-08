@@ -1,3 +1,10 @@
+body{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 #board-container{
   display: flex;
   flex-flow: row wrap;

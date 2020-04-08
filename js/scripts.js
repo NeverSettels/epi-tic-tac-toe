@@ -57,8 +57,11 @@ $(document).ready(() => {
         $(`#${key}`).text('X')
       }
       game.checkWinner();
-      if (game.over) {
+      if (game.over || turn >= 9) {
         $("#board-container div").prop("disabled", true);
+        if (!game.over) {
+          console.log('its a tie');
+        }
       }
       turn++
     } else {
