@@ -33,6 +33,13 @@ Board.prototype.checkWinner = function () {
   }
 }
 
+function addListener() {
+  $("#reset").click(function () {
+    console.log("reset")
+    location.reload()
+  })
+}
+
 
 $(document).ready(() => {
   let game = new Board()
@@ -58,7 +65,10 @@ $(document).ready(() => {
         } else {
           $("#message").html(`<h1 class="animated flip green">${game[key]} is the Winner</h1>`)
         }
-
+        setTimeout(() => {
+          $("#mm").html(`<button id="reset" class="btn btn-success">Replay?</button>`)
+          addListener()
+        }, 2000);
       }
       turn++
     } else {
@@ -67,6 +77,8 @@ $(document).ready(() => {
       $('#message').html(`<h1 class="animated hinge red"> WRONG</h1>`);
     }
   })
+
+
 })
 
 
