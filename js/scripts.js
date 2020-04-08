@@ -33,9 +33,11 @@ Board.prototype.checkWinner = function () {
   }
 }
 
-function addListener() {
+
+//ui
+
+function addResetListener() {
   $("#reset").click(function () {
-    console.log("reset")
     location.reload()
   })
 }
@@ -44,45 +46,67 @@ function attachWrong(plop, wrong) {
   wrong.play()
   $('#message').html(`<h1 class="animated hinge red"> WRONG</h1>`);
 }
+function simpleAi(game) {
+  let keys = ["tl", "tm", "tr", "mr", "mm", "ml", "bl", "bm", "br"]
+  let AIKey = []
+  for (let i = 0; i >= 0; i++) {
+    AIKey = keys[Math.floor(Math.random() * 9)];
+    if (!game[AIKey]) {
+      break;
+    }
+  }
+  game[AIKey] = 'O'
+  $(`#${AIKey}`).html(`<span class="animated rubberBand">O</span>`)
+}
+function endGameDisplay(game, key, turn, yodle, victory) {
+  if (game.over || turn >= 9) {
+    $("#board-container div").prop("disabled", true);
+    if (!game.over) {
+      yodle.play()
+      setTimeout(() => { yodle.pause() }, 15500)
+      $("#message").html(`<h1 class="animated flipInX blue">It's a tie both you suck</h1>`)
+    } else {
+      victory.play()
+      $("#message").html(`<h1 class="animated flip green">${game[key]} is the Winner</h1>`)
+    }
+    setTimeout(() => {
+      $("#mm").html(`<button id="reset" class="btn btn-success">Replay?</button>`)
+      addResetListener()
+    }, 3000);
+  }
+}
+
 
 $(document).ready(() => {
   let game = new Board()
   let turn = 1;
   const plop = new Audio('https://freesound.org/data/previews/19/19987_37876-lq.mp3')
   const wrong = new Audio('https://freesound.org/data/previews/325/325443_4490625-lq.mp3')
-  const victory = new Audio('https://freesound.org/data/previews/249/249524_3906011-lq.mp3')
+  const victory = new Audio('https://www.myinstants.com/media/sounds/victory_fanfare.mp3')
   const yodle = new Audio(`https://www.redringtones.com/wp-content/uploads/2016/12/price-is-right-mountain-climber.mp3`)
+  let twoplayer = false
   $('#board-container').on('click', 'div', event => {
     let key = event.target.id
     if (!game[key]) {
       plop.play()
       if (turn % 2 === 0) {
-        game[key] = 'O'
-        $(`#${key}`).html(`<span class="animated rubberBand">O</span>`)
+        if (twoplayer) {
+          game[key] = 'O'
+          $(`#${key}`).html(`<span class="animated rubberBand">O</span>`)
+        } else {
+          simpleAi(game)
+        }
       } else {
         game[key] = 'X'
         $(`#${key}`).html(`<span class="animated rubberBand">X</span>`)
       }
       game.checkWinner();
-      if (game.over || turn >= 9) {
-        $("#board-container div").prop("disabled", true);
-        if (!game.over) {
-          yodle.play()
-          setTimeout(() => { yodle.pause() }, 15500)
-          $("#message").html(`<h1 class="animated flipInX blue">It's a tie both you suck</h1>`)
-        } else {
-          victory.play()
-          $("#message").html(`<h1 class="animated flip green">${game[key]} is the Winner</h1>`)
-        }
-        setTimeout(() => {
-          $("#mm").html(`<button id="reset" class="btn btn-success">Replay?</button>`)
-          addListener()
-        }, 2000);
-      }
+      endGameDisplay(game, key, turn, yodle, victory)
       turn++
     } else {
       attachWrong(plop, wrong)
     }
+
   })
 
 
