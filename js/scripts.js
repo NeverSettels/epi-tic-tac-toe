@@ -39,13 +39,19 @@ function addListener() {
     location.reload()
   })
 }
-
+function attachWrong(plop, wrong) {
+  plop.pause()
+  wrong.play()
+  $('#message').html(`<h1 class="animated hinge red"> WRONG</h1>`);
+}
 
 $(document).ready(() => {
   let game = new Board()
   let turn = 1;
   const plop = new Audio('https://freesound.org/data/previews/19/19987_37876-lq.mp3')
   const wrong = new Audio('https://freesound.org/data/previews/325/325443_4490625-lq.mp3')
+  const victory = new Audio('https://freesound.org/data/previews/249/249524_3906011-lq.mp3')
+  const yodle = new Audio(`https://www.redringtones.com/wp-content/uploads/2016/12/price-is-right-mountain-climber.mp3`)
   $('#board-container').on('click', 'div', event => {
     let key = event.target.id
     if (!game[key]) {
@@ -61,8 +67,11 @@ $(document).ready(() => {
       if (game.over || turn >= 9) {
         $("#board-container div").prop("disabled", true);
         if (!game.over) {
+          yodle.play()
+          setTimeout(() => { yodle.pause() }, 15500)
           $("#message").html(`<h1 class="animated flipInX blue">It's a tie both you suck</h1>`)
         } else {
+          victory.play()
           $("#message").html(`<h1 class="animated flip green">${game[key]} is the Winner</h1>`)
         }
         setTimeout(() => {
@@ -72,9 +81,7 @@ $(document).ready(() => {
       }
       turn++
     } else {
-      plop.pause()
-      wrong.play()
-      $('#message').html(`<h1 class="animated hinge red"> WRONG</h1>`);
+      attachWrong(plop, wrong)
     }
   })
 
