@@ -1,0 +1,12 @@
+#board-container{
+  display: flex;
+  flex-flow: row wrap;
+  width: 305px;
+  height: 305px;
+}
+
+#board-container div{
+  border: 1px black solid;
+  width: 100px;
+  height: 100px;
+}
