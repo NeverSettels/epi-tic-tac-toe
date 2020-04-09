@@ -58,14 +58,17 @@ function simpleAi(game) {
     AIKey = keys[Math.floor(Math.random() * 9)];
     if (!game[AIKey]) {
       break;
+
     } else if (game.over) {
       break
     }
   }
   game[AIKey] = 'O'
   $(`#${AIKey}`).html(`<span class="animated rubberBand">O</span>`)
+  return AIKey;
+
 }
-function endGameDisplay(game, key, turn, yodle, victory) {
+function endGameDisplay(game, key, yodle, victory) {
   if (game.over || game.tie) {
     $("#board-container div").prop("disabled", true);
     if (game.tie) {
@@ -102,17 +105,19 @@ function addXorO(game, key, turn, twoplayer) {
 
       game[key] = 'X'
       $(`#${key}`).html(`<span class="animated rubberBand">X</span>`)
+      game.checkWinner();
+      endGameDisplay(game, key, yodle, victory)//
       setTimeout(() => {
-        simpleAi(game);
+        key = simpleAi(game);
         game.checkWinner();
-        endGameDisplay(game, key, turn, yodle, victory)
+        endGameDisplay(game, key, yodle, victory)
       }, 500);
 
     }
     console.log(game);
 
     game.checkWinner();
-    endGameDisplay(game, key, turn, yodle, victory)
+    endGameDisplay(game, key, yodle, victory)
 
   } else {
     attachWrong(plop, wrong)
