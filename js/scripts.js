@@ -9,9 +9,11 @@ function Board() {
   this.bm = null;
   this.br = null;
   this.over = false;
+  this.tie = false;
 }
 
 Board.prototype.checkWinner = function () {
+  let valuesArr = Object.values(this);
   if (this.tl && this.tl === this.tm && this.tm === this.tr) {
     this.over = true
   } else if (this.ml && this.ml === this.mm && this.mm === this.mr) {
@@ -28,6 +30,9 @@ Board.prototype.checkWinner = function () {
     this.over = true
   } else if (this.tr && this.tr === this.mm && this.mm === this.bl) {
     this.over = true
+  } else if (!valuesArr.includes(null)) {
+    this.over = true
+    this.tie = true;
   } else {
     this.over = false
   }
@@ -61,9 +66,9 @@ function simpleAi(game) {
   $(`#${AIKey}`).html(`<span class="animated rubberBand">O</span>`)
 }
 function endGameDisplay(game, key, turn, yodle, victory) {
-  if (game.over || turn >= 9) {
+  if (game.over || game.tie) {
     $("#board-container div").prop("disabled", true);
-    if (!game.over) {
+    if (game.tie) {
       yodle.play()
       setTimeout(() => { yodle.pause() }, 15500)
       $("#message").html(`<h1 class="animated flipInX blue">It's a tie try again</h1>`)
@@ -93,8 +98,8 @@ function addXorO(game, key, turn, twoplayer) {
         game[key] = 'X'
         $(`#${key}`).html(`<span class="animated rubberBand">X</span>`)
       }
-
     } else {
+
       game[key] = 'X'
       $(`#${key}`).html(`<span class="animated rubberBand">X</span>`)
       setTimeout(() => {
