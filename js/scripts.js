@@ -108,14 +108,14 @@ function addXorO(game, key, turn, twoplayer) {
       $(`#${key}`).html(`<span class="animated rubberBand">X</span>`)
       game.checkWinner();
       endGameDisplay(game, key, yodle, victory)//
-
-      setTimeout(() => {
-        plop.play();
-        key = simpleAi(game);
-        game.checkWinner();
-        endGameDisplay(game, key, yodle, victory)
-      }, 1000);
-
+      if (!game.over) {
+        setTimeout(() => {
+          plop.play();
+          key = simpleAi(game);
+          game.checkWinner();
+          endGameDisplay(game, key, yodle, victory)
+        }, 500);
+      }
     }
     game.checkWinner();
     endGameDisplay(game, key, yodle, victory)
