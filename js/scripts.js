@@ -53,6 +53,8 @@ function simpleAi(game) {
     AIKey = keys[Math.floor(Math.random() * 9)];
     if (!game[AIKey]) {
       break;
+    } else if (game.over) {
+      break
     }
   }
   game[AIKey] = 'O'
@@ -64,7 +66,7 @@ function endGameDisplay(game, key, turn, yodle, victory) {
     if (!game.over) {
       yodle.play()
       setTimeout(() => { yodle.pause() }, 15500)
-      $("#message").html(`<h1 class="animated flipInX blue">It's a tie both you suck</h1>`)
+      $("#message").html(`<h1 class="animated flipInX blue">It's a tie try again</h1>`)
     } else {
       victory.play()
       $("#message").html(`<h1 class="animated flip green">${game[key]} is the Winner</h1>`)
@@ -76,40 +78,51 @@ function endGameDisplay(game, key, turn, yodle, victory) {
   }
 }
 
-
-$(document).ready(() => {
-  let game = new Board()
-  let turn = 1;
+function addXorO(game, key, turn, twoplayer) {
   const plop = new Audio('https://freesound.org/data/previews/19/19987_37876-lq.mp3')
   const wrong = new Audio('https://freesound.org/data/previews/325/325443_4490625-lq.mp3')
   const victory = new Audio('https://www.myinstants.com/media/sounds/victory_fanfare.mp3')
   const yodle = new Audio(`https://www.redringtones.com/wp-content/uploads/2016/12/price-is-right-mountain-climber.mp3`)
-  let twoplayer = false
-  $('#board-container').on('click', 'div', event => {
-    let key = event.target.id
-    if (!game[key]) {
-      plop.play()
+  if (!game[key]) {
+    plop.play()
+    if (twoplayer) {
       if (turn % 2 === 0) {
-        if (twoplayer) {
-          game[key] = 'O'
-          $(`#${key}`).html(`<span class="animated rubberBand">O</span>`)
-        } else {
-          simpleAi(game)
-        }
+        game[key] = 'O'
+        $(`#${key}`).html(`<span class="animated rubberBand">O</span>`)
       } else {
         game[key] = 'X'
         $(`#${key}`).html(`<span class="animated rubberBand">X</span>`)
       }
-      game.checkWinner();
-      endGameDisplay(game, key, turn, yodle, victory)
-      turn++
+
     } else {
-      attachWrong(plop, wrong)
+      game[key] = 'X'
+      $(`#${key}`).html(`<span class="animated rubberBand">X</span>`)
+      setTimeout(() => {
+        simpleAi(game);
+        game.checkWinner();
+        endGameDisplay(game, key, turn, yodle, victory)
+      }, 500);
+
     }
+    console.log(game);
 
+    game.checkWinner();
+    endGameDisplay(game, key, turn, yodle, victory)
+
+  } else {
+    attachWrong(plop, wrong)
+  }
+}
+
+$(document).ready(() => {
+  let game = new Board()
+  let turn = 1;
+  let twoplayer = false
+  $('#board-container').on('click', 'div', event => {
+    let key = event.target.id
+    addXorO(game, key, turn, twoplayer)
+    turn++
   })
-
-
 })
 
 
