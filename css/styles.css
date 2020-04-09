@@ -54,3 +54,16 @@ body{
 .blue{
   color: royalblue
 }
+/* CSS rules are kept repetitive so that you can get CSS rules for each button easily :) */
+
+
+
+.single-player{
+  color: green;
+  font-weight: bold;
+}
+.twoplayer{
+  content: 'Two Player';
+  color: goldenrod;
+  font-weight: bold;
+}

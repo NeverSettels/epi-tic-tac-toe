@@ -53,7 +53,7 @@ function attachWrong(plop, wrong) {
 }
 function simpleAi(game) {
   let keys = ["tl", "tm", "tr", "mr", "mm", "ml", "bl", "bm", "br"]
-  let AIKey = []
+  let AIKey = ''
   for (let i = 0; i >= 0; i++) {
     AIKey = keys[Math.floor(Math.random() * 9)];
     if (!game[AIKey]) {
@@ -65,6 +65,7 @@ function simpleAi(game) {
   }
   game[AIKey] = 'O'
   $(`#${AIKey}`).html(`<span class="animated rubberBand">O</span>`)
+  console.log(AIKey);
   return AIKey;
 
 }
@@ -107,15 +108,15 @@ function addXorO(game, key, turn, twoplayer) {
       $(`#${key}`).html(`<span class="animated rubberBand">X</span>`)
       game.checkWinner();
       endGameDisplay(game, key, yodle, victory)//
+
       setTimeout(() => {
+        plop.play();
         key = simpleAi(game);
         game.checkWinner();
         endGameDisplay(game, key, yodle, victory)
-      }, 500);
+      }, 1000);
 
     }
-    console.log(game);
-
     game.checkWinner();
     endGameDisplay(game, key, yodle, victory)
 
@@ -128,6 +129,23 @@ $(document).ready(() => {
   let game = new Board()
   let turn = 1;
   let twoplayer = false
+  $('#mode').click(function () {
+    twoplayer = !twoplayer
+    $("label").toggleClass('single-player')
+    $("label").toggleClass('twoplayer')
+    $("label").toggleClass('animated')
+    $("label").toggleClass('animated')
+    $("label").toggleClass('bounce')
+    $("label").toggleClass('swing')
+    $("label").removeClass('delay-4s')
+    $("label").toggleClass('delay-1s')
+    $("label").toggleClass('delay-1s')
+    if (twoplayer) {
+      $("label").text('Two Player')
+    } else {
+      $("label").text('Single Player')
+    }
+  })
   $('#board-container').on('click', 'div', event => {
     let key = event.target.id
     addXorO(game, key, turn, twoplayer)
