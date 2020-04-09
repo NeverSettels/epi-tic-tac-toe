@@ -67,3 +67,6 @@ body{
   color: goldenrod;
   font-weight: bold;
 }
+label{
+  cursor: pointer;
+}
